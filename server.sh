@@ -1,10 +1,9 @@
 #!/bin/bash
 
 
-
-
 # that ip you want to set
   ip='1.1.1.1'
+
 
 
 
@@ -39,7 +38,7 @@
 
       ping5=`echo $request2 | jq -r .'"data" | ."avg"' | cut -b 3 `
 
-      if [ $ping5 -le "1000" ]
+      if [ -r $ping5 ]
       then
         echo '1'
       else
@@ -63,7 +62,7 @@
     ping4=`echo $request | jq -r .'"ir6.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping5=$( echo `ping -w5 $1 | grep -c 'ms'`)
 
-    if [ $ping1 = "OK" -a $ping2 = "OK" -o $ping3 = "OK" -a $ping4 = "OK" ]
+    if [ $ping1 = "OK" -a $ping2 = "OK" -a $ping3 = "OK" -a $ping4 = "OK" ]
     then
       echo '1'
     else

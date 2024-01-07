@@ -259,9 +259,9 @@ then
         if [ `echo $STATUS` = "0" ]
         then
 #------------------------------------ set this values
-          cf_records_update $ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
-          ac_records_update $ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
-          iran_tunnel $ip '/address/of/your/tunnel/service/config.txt'
+          cf_records_update $new_ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
+          ac_records_update $new_ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
+          iran_tunnel $new_ip '/address/of/your/tunnel/service/config.txt'
 #----------------------------------------------------
           message='your ip changed.'
           current_ip=`echo $new_ip`

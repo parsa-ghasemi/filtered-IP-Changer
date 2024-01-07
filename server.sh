@@ -2,8 +2,8 @@
 
 
 # that ip you want to set
-  ip='1.1.1.1'
-
+  new_ip='1.1.1.1'
+  current_ip='1.1.2.2'
 
 
 
@@ -240,8 +240,64 @@ END
 
 
 
-get_iran_ping $ip
-get_ping $ip 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'
-cf_records_update $ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
-ac_records_update $ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
-iran_tunnel $ip '/address/of/your/tunnel/service/config.txt'
+
+ping_res=`get_ping $current_ip 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxxx'`
+if [ $ping_res = "1" ]
+then
+  ping_iran_res=`get_iran_ping $current_ip`
+  if [ $ping_iran_res = "1" ]
+  then
+    message='your ip is available in iran.'
+    export STATUS="1"
+  else
+    ping_iran_res=`get_iran_ping $current_ip`
+    if [ $ping_iran_res = "0" ]
+    then
+      ping_iran_res=`get_iran_ping $current_ip`
+      if [ $ping_iran_res = "0" ]
+      then
+        if [ `echo $STATUS` = "0" ]
+        then
+#------------------------------------ set this values
+          cf_records_update $ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
+          ac_records_update $ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
+          iran_tunnel $ip '/address/of/your/tunnel/service/config.txt'
+#----------------------------------------------------
+          message='your ip changed.'
+          current_ip=`echo $new_ip`
+          export STATUS="0"
+        elif [ `echo $STATUS` = "1" ]
+        then
+          message='please check ip maybe is unavailable.'
+          export STATUS="0"
+        else
+          message='STATUS variable is not correct or is not set.'
+          export STATUS="1"
+        fi
+      else
+      message='your ip is available in iran.'
+      export STATUS="1"
+      fi
+    else
+      message='your ip is available in iran.'
+      export STATUS="1"
+    fi
+  fi
+else
+  message='your ip is not available at all.'
+  export STATUS="0"
+fi
+
+
+cat << END
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+---------------------------- $message ---------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+END
+bash

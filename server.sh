@@ -14,6 +14,49 @@ ip='1.1.1.1'
 
 #-------------------------start functions
 
+# global ping ($1=ip)
+function get_ping(){
+  request=$(curl -v -H "Accept: application/json" \
+  'https://check-host.net/check-ping?host='$1'&node=pl1.node.check-host.net&node=us3.node.check-host.net&node=jp1.node.check-host.net&node=fr2.node.check-host.net' | jq -r '.request_id')
+
+  request=$(curl -v -H "Accept: application/json" \
+  https://check-host.net/check-result/$request)
+
+  ping1=`echo $request | jq -r .'"jp1.node.check-host.net" | .[0] | .[0] | .[0]'`
+  ping2=`echo $request | jq -r .'"pl1.node.check-host.net" | .[0] | .[0] | .[0]'`
+  ping3=`echo $request | jq -r .'"us3.node.check-host.net" | .[0] | .[0] | .[0]'`
+  ping4=`echo $request | jq -r .'"fr2.node.check-host.net" | .[0] | .[0] | .[0]'`
+
+  if [ $ping1 = "OK" -o $ping2 = "OK" -o $ping3 = "OK" -o $ping4 = "OK" ]
+  then
+    echo '1'
+  else
+    echo '0'
+  fi
+}
+
+
+# iran ping ($1=ip)
+function get_iran_ping(){
+  request=$(curl -v -H "Accept: application/json" \
+  'https://check-host.net/check-ping?host='$1'&node=ir1.node.check-host.net&node=ir3.node.check-host.net&node=ir5.node.check-host.net&node=ir6.node.check-host.net' | jq -r '.request_id')
+
+  request=$(curl -v -H "Accept: application/json" \
+  https://check-host.net/check-result/$request)
+
+  ping1=`echo $request | jq -r .'"ir1.node.check-host.net" | .[0] | .[0] | .[0]'`
+  ping2=`echo $request | jq -r .'"ir3.node.check-host.net" | .[0] | .[0] | .[0]'`
+  ping3=`echo $request | jq -r .'"ir5.node.check-host.net" | .[0] | .[0] | .[0]'`
+  ping4=`echo $request | jq -r .'"ir6.node.check-host.net" | .[0] | .[0] | .[0]'`
+
+  if [ $ping1 = "OK" -a $ping2 = "OK" -a $ping3 = "OK" -a $ping4 = "OK" ]
+  then
+    echo '1'
+  else
+    echo '0'
+  fi
+}
+
 
 # get zone information of cloudflare ($1=zone-id, $2=email, $3=key)
   function cf_records_info(){

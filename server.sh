@@ -89,7 +89,7 @@ function get_iran_ping(){
             --header 'X-Auth-Email:'$3 \
             --header 'X-Auth-Key:'$4 \
             --data '{
-            "content": "'$ip'",
+            "content": "'$1'",
             "name": "'${cf_dns_domains[$i]}'",
             "proxied": true,
             "type": "A"
@@ -112,9 +112,9 @@ END
 
 # get zone information 0f arvancloud ($1=domain, $2=key)
   function ac_records_info(){
-    request=$(curl -v --location --request GET 'https://napi.arvancloud.ir/cdn/4.0/domains/'$2'/dns-records' \
+    request=$(curl -v --location --request GET 'https://napi.arvancloud.ir/cdn/4.0/domains/'$1'/dns-records' \
     --header 'Accept: application/json' \
-    --header "Authorization:apikey $3")
+    --header "Authorization:apikey $2")
 
     ac_domains_count=$((( $( echo $request | jq -r '.meta | .total' ) - 2 )))
 
@@ -140,7 +140,7 @@ END
         --data '{
           "value": [
             {
-              "ip": "'$ip'",
+              "ip": "'$1'",
               "port": null, 
               "weight": null,
               "country": "IR"
@@ -176,54 +176,7 @@ END
 #update tunnel ip ($1=ip, $2=config-address)
   function iran_tunnel(){
     cat <<END > $2
-{
-  "inbounds": [
-    {
-      "listen": "127.0.0.1",
-      "port": 62789,
-      "protocol": "dokodemo-door",
-      "settings": {
-        "address": "127.0.0.1"
-      },
-      "tag": "api"
-    },
-    {
-      "listen": null,
-      "port": 80,
-      "protocol": "dokodemo-door",
-      "settings": {
-        "address": "$1",
-        "followRedirect": false,
-        "network": "tcp,udp",
-        "network": "tcp,udp",
-        "port": 80
-      },
-      "tag": "inbound-80"
-    },
-    {
-      "listen": null,
-      "port": 8443,
-      "protocol": "dokodemo-door",
-      "settings": {
-        "address": "$1",
-        "followRedirect": false,
-        "network": "tcp,udp",
-        "port": 8443
-      },
-      "tag": "inbound-8443"
-    }
-  ],
-  "outbounds": [
-    {
-      "protocol": "freedom"
-    },
-    {
-      "protocol": "blackhole",
-      "tag": "blocked"
-    }
-  ]
-}
-
+  'enter the tunnel config settings here and your can use $1 for ip'
 END
 
       `sudo systemctl restart xray`
@@ -241,6 +194,7 @@ END
 END
   }
 #------------------------- end functions
+
 
 
 

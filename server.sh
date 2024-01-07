@@ -60,12 +60,18 @@ function get_iran_ping(){
   ping2=`echo $request | jq -r .'"ir3.node.check-host.net" | .[0] | .[0] | .[0]'`
   ping3=`echo $request | jq -r .'"ir5.node.check-host.net" | .[0] | .[0] | .[0]'`
   ping4=`echo $request | jq -r .'"ir6.node.check-host.net" | .[0] | .[0] | .[0]'`
+  ping5=$(echo `ping -w5 $1 | grep -c 'ms'`)
 
-  if [ $ping1 = "OK" -a $ping2 = "OK" -a $ping3 = "OK" -a $ping4 = "OK" ]
+  if [ $ping1 = "OK" -a $ping2 = "OK" -o $ping3 = "OK" -a $ping4 = "OK" ]
   then
     echo '1'
   else
-    echo '0'
+    if [ $ping5 -ge "5" ]
+    then
+      echo '1'
+    else
+      echo '0'
+    fi
   fi
 }
 
@@ -209,6 +215,7 @@ END
 
 
 
+get_iran_ping $ip
 get_ping $ip 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'
 cf_records_update $ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
 ac_records_update $ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'

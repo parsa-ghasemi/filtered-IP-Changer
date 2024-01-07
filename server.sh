@@ -14,7 +14,7 @@ ip='1.1.1.1'
 
 #-------------------------start functions
 
-# global ping ($1=ip)
+# global ping ($1=ip, $2=siterelic token)
 function get_ping(){
   request=$(curl -v -H "Accept: application/json" \
   'https://check-host.net/check-ping?host='$1'&node=pl1.node.check-host.net&node=us3.node.check-host.net&node=jp1.node.check-host.net&node=fr2.node.check-host.net' | jq -r '.request_id')
@@ -31,7 +31,19 @@ function get_ping(){
   then
     echo '1'
   else
-    echo '0'
+    request2=$(curl --location --request POST 'https://api.siterelic.com/ping' \
+    --header 'x-api-key:'$2 \
+    --header 'Content-Type: application/json' \
+    --data-raw '{ "url": "'$1'" }')
+
+    ping5=`echo $request2 | jq -r .'"data" | ."avg"' | cut -b 3 `
+
+    if [ $ping5 -le "1000" ]
+    then
+      echo '1'
+    else
+      echo '0'
+    fi
   fi
 }
 
@@ -197,11 +209,7 @@ END
 
 
 
-
+get_ping $ip 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'
 cf_records_update $ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
 ac_records_update $ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
 iran_tunnel $ip '/address/of/your/tunnel/service/config.txt'
-
-
-
-

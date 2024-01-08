@@ -17,17 +17,17 @@
 # global ping ($1=ip, $2=siterelic token)
   function get_ping(){
     request=$(curl -v --header "Accept: application/json" \
-    'https://check-host.net/check-ping?host='$1'&node=pl1.node.check-host.net&node=us3.node.check-host.net&node=jp1.node.check-host.net&node=fr2.node.check-host.net' | jq -r '.request_id')
+    'https://check-host.net/check-ping?host='$1'&node=pl1.node.check-host.net&node=us3.node.check-host.net&node=fr2.node.check-host.net' | jq -r '.request_id')
 
     request=$(curl -v --header "Accept: application/json" \
     https://check-host.net/check-result/$request)
 
-    ping1=`echo $request | jq -r .'"jp1.node.check-host.net" | .[0] | .[0] | .[0]'`
-    ping2=`echo $request | jq -r .'"pl1.node.check-host.net" | .[0] | .[0] | .[0]'`
-    ping3=`echo $request | jq -r .'"us3.node.check-host.net" | .[0] | .[0] | .[0]'`
-    ping4=`echo $request | jq -r .'"fr2.node.check-host.net" | .[0] | .[0] | .[0]'`
+    ping1=`echo $request | jq -r .'"pl1.node.check-host.net" | .[0] | .[0] | .[0]'`
+    ping2=`echo $request | jq -r .'"us3.node.check-host.net" | .[0] | .[0] | .[0]'`
+    ping3=`echo $request | jq -r .'"fr2.node.check-host.net" | .[0] | .[0] | .[0]'`
+    ping4=$( echo `ping -w5 $1 | grep -c 'ms'`)
 
-    if [ $ping1 = "OK" -o $ping2 = "OK" -o $ping3 = "OK" -o $ping4 = "OK" ]
+    if [ $ping1 = "OK" -o $ping2 = "OK" -o $ping3 = "OK" -o $ping4 -ge "5" ]
     then
       echo '1'
     else
@@ -241,7 +241,7 @@ END
 
 
 
-ping_res=`get_ping $current_ip 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxxx'`
+ping_res=`get_ping $current_ip 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'`
 if [ $ping_res = "1" ]
 then
   ping_iran_res=`get_iran_ping $current_ip`

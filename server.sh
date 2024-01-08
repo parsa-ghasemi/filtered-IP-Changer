@@ -1,12 +1,6 @@
 #!/bin/bash
 
 
-# that ip you want to set
-  new_ip='1.1.1.1'
-
-
-
-
 
 
 
@@ -239,33 +233,33 @@ END
 
 
 
-if [ ! $CURRENT_IP = null ]
+if [ ! $CURRENT_IP1 = null ]
 then
-  ping_res=`get_ping $CURRENT_IP 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'`
+  ping_res=`get_ping $CURRENT_IP1 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'`
   if [ $ping_res = "1" ]
   then
-    ping_iran_res=`get_iran_ping $CURRENT_IP`
+    ping_iran_res=`get_iran_ping $CURRENT_IP1`
     if [ $ping_iran_res = "1" ]
     then
       message='your ip is available in iran.'
       export STATUS="1"
       echo $message | systemd-cat -t CDN-IP-changer -p info
     else
-      ping_iran_res=`get_iran_ping $CURRENT_IP`
+      ping_iran_res=`get_iran_ping $CURRENT_IP1`
       if [ $ping_iran_res = "0" ]
       then
-        ping_iran_res=`get_iran_ping $CURRENT_IP`
+        ping_iran_res=`get_iran_ping $CURRENT_IP1`
         if [ $ping_iran_res = "0" ]
         then
           if [ `echo $STATUS` = "0" ]
           then
   #------------------------------------ set this values
-           cf_records_update $new_ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
-           ac_records_update $new_ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
-           iran_tunnel $new_ip '/address/of/your/tunnel/service/config.txt'
+           cf_records_update $NEW_IP 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
+           ac_records_update $NEW_IP 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
+           iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
   #----------------------------------------------------
-            message='your ip changed.'
-            export CURRENT_IP=`echo $new_ip`
+            message='your ip changed.' 
+            printf "\nexport CURRENT_IP1='`echo $NEW_IP`' \n# `date -R`" >> ips.env
             export STATUS="0"
             echo $message | systemd-cat -t CDN-IP-changer -p info
           elif [ `echo $STATUS` = "1" ]
@@ -295,7 +289,7 @@ then
     echo $message | systemd-cat -t CDN-IP-changer -p error
   fi
 else
-  message='enter current ip like this: export CURRENT_IP='"'1.1.1.1'"
+  message="enter current ip in ips.env file"
   echo $message | systemd-cat -t CDN-IP-changer -p warning
 fi
 cat << END

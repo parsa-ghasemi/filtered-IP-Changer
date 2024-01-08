@@ -13,9 +13,9 @@ sudo apt install jq -y
 ```bash script
 nano server.env
 ```
-and set your cloudflare information in `cf_records_update` and set arvancloud in `ac_records_update`.
+set your cloudflare information in `cf_records_update` and set arvancloud in `ac_records_update`.
 </br>
-get free API token of [siterelic.com](siterelic.com) in set that in `get_ping`.
+get free API token of [siterelic.com](siterelic.com) and set in `get_ping`.
 </br>
 if you use this for vpn-server, you can use `iran_tunnel` for set your tunnel config.
 #### andis parameter
@@ -41,7 +41,7 @@ iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
 ```bash script
 nano ips.env
 ```
-then enter $NEW_IP, $CURRENT_IP1 your with your IPs and, save & exit file with `control + y` & `control + x`.
+enter $NEW_IP, $CURRENT_IP1 with your IPs and, save & exit file with `control + y` & `control + x`.
 
 
 
@@ -55,7 +55,7 @@ bash start.sh
 
 
 ## cronjob
-you can set cronjob for auto update IP, if the IP doesn't ping then change DNS IP in your all services
+you can set cronjob for auto update IP, if the IP doesn't ping then changed DNS IP in your all services
 </br></br>
 ```
 */5 * * * * . /address/to/file/ips.env; /bin/bash /address/to/file/server.sh

@@ -249,6 +249,7 @@ then
     then
       message='your ip is available in iran.'
       export STATUS="1"
+      echo $message | systemd-cat -t CDN-IP-changer -p info
     else
       ping_iran_res=`get_iran_ping $CURRENT_IP`
       if [ $ping_iran_res = "0" ]
@@ -266,29 +267,36 @@ then
             message='your ip changed.'
             export CURRENT_IP=`echo $new_ip`
             export STATUS="0"
+            echo $message | systemd-cat -t CDN-IP-changer -p info
           elif [ `echo $STATUS` = "1" ]
           then
             message='please check ip maybe is unavailable.'
             export STATUS="0"
+            echo $message | systemd-cat -t CDN-IP-changer -p warning
           else
             message='STATUS variable is not correct or is not set.'
             export STATUS="1"
+            echo $message | systemd-cat -t CDN-IP-changer -p warning
           fi
         else
         message='your ip is available in iran.'
         export STATUS="1"
+        echo $message | systemd-cat -t CDN-IP-changer -p info
         fi
       else
         message='your ip is available in iran.'
         export STATUS="1"
+        echo $message | systemd-cat -t CDN-IP-changer -p info
       fi
     fi
   else
     message='your ip is not available at all.'
     export STATUS="0"
+    echo $message | systemd-cat -t CDN-IP-changer -p error
   fi
 else
   message='enter current ip like this: export CURRENT_IP='"'1.1.1.1'"
+  echo $message | systemd-cat -t CDN-IP-changer -p warning
 fi
 cat << END
 -------------------------------------------------------------------------------------

@@ -3,7 +3,6 @@
 
 # that ip you want to set
   new_ip='1.1.1.1'
-  current_ip='1.1.2.2'
 
 
 
@@ -90,7 +89,7 @@
     while [ $i -le $(( $cf_domains_count - 1 )) ]
       do
         cf_dns_ids+=($( echo $request | jq -r '.result | .['$i'] | .id' ))
-        cf_dns_domains+=($( echo $request | jq -r '.result | .['$i'] | .name' ))        
+        cf_dns_domains+=($( echo $request | jq -r '.result | .['$i'] | .name' ))         
         i=$(( $i + 1 ))
       done
   }
@@ -240,55 +239,57 @@ END
 
 
 
-
-ping_res=`get_ping $current_ip 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'`
-if [ $ping_res = "1" ]
+if [ ! $CURRENT_IP = null ]
 then
-  ping_iran_res=`get_iran_ping $current_ip`
-  if [ $ping_iran_res = "1" ]
+  ping_res=`get_ping $CURRENT_IP 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'`
+  if [ $ping_res = "1" ]
   then
-    message='your ip is available in iran.'
-    export STATUS="1"
-  else
-    ping_iran_res=`get_iran_ping $current_ip`
-    if [ $ping_iran_res = "0" ]
+    ping_iran_res=`get_iran_ping $CURRENT_IP`
+    if [ $ping_iran_res = "1" ]
     then
-      ping_iran_res=`get_iran_ping $current_ip`
+      message='your ip is available in iran.'
+      export STATUS="1"
+    else
+      ping_iran_res=`get_iran_ping $CURRENT_IP`
       if [ $ping_iran_res = "0" ]
       then
-        if [ `echo $STATUS` = "0" ]
+        ping_iran_res=`get_iran_ping $CURRENT_IP`
+        if [ $ping_iran_res = "0" ]
         then
-#------------------------------------ set this values
-          cf_records_update $new_ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
-          ac_records_update $new_ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
-          iran_tunnel $new_ip '/address/of/your/tunnel/service/config.txt'
-#----------------------------------------------------
-          message='your ip changed.'
-          current_ip=`echo $new_ip`
-          export STATUS="0"
-        elif [ `echo $STATUS` = "1" ]
-        then
-          message='please check ip maybe is unavailable.'
-          export STATUS="0"
+          if [ `echo $STATUS` = "0" ]
+          then
+  #------------------------------------ set this values
+           cf_records_update $new_ip 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
+           ac_records_update $new_ip 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
+           iran_tunnel $new_ip '/address/of/your/tunnel/service/config.txt'
+  #----------------------------------------------------
+            message='your ip changed.'
+            export CURRENT_IP=`echo $new_ip`
+            export STATUS="0"
+          elif [ `echo $STATUS` = "1" ]
+          then
+            message='please check ip maybe is unavailable.'
+            export STATUS="0"
+          else
+            message='STATUS variable is not correct or is not set.'
+            export STATUS="1"
+          fi
         else
-          message='STATUS variable is not correct or is not set.'
-          export STATUS="1"
+        message='your ip is available in iran.'
+        export STATUS="1"
         fi
       else
-      message='your ip is available in iran.'
-      export STATUS="1"
+        message='your ip is available in iran.'
+        export STATUS="1"
       fi
-    else
-      message='your ip is available in iran.'
-      export STATUS="1"
     fi
+  else
+    message='your ip is not available at all.'
+    export STATUS="0"
   fi
 else
-  message='your ip is not available at all.'
-  export STATUS="0"
+  message='enter current ip like this: export CURRENT_IP='"'1.1.1.1'"
 fi
-
-
 cat << END
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------

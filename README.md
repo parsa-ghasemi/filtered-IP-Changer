@@ -7,11 +7,18 @@ sudo apt update && sudo apt upgrade
 sudo apt install jq -y
 ```
 
+### 2. install script
+```bash 
+wget https://github.com/parsa-ghasemi/CDN-DNS-ip-changer/archive/refs/tags/v1.4.tar.gz
+tar xvzf v1.4.tar.gz
+rm -r v1.4.tar.gz
+cd CDN-DNS-ip-changer-1.4
 
+```
 
-### 2. set tokens
+### 3. set tokens
 ```bash script
-nano server.env
+nano server.sh
 ```
 set your cloudflare information in `cf_records_update` and set arvancloud in `ac_records_update`.
 </br>
@@ -37,7 +44,7 @@ iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
 
 
 
-### 3. set ips
+### 4. set ips
 ```bash script
 nano ips.env
 ```
@@ -58,7 +65,7 @@ bash start.sh
 you can set cronjob for auto update IP, if the IP doesn't ping then changed DNS IP in your all services
 </br></br>
 ```
-*/5 * * * * . /address/to/file/ips.env; /bin/bash /address/to/file/server.sh
+*/5 * * * * /bin/bash /the/file/location/CDN-DNS-ip-changer/start.sh
 ```
 
 

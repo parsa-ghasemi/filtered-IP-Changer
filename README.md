@@ -7,6 +7,10 @@ sudo apt update && sudo apt upgrade
 sudo apt install jq -y
 ```
 
+
+
+
+
 ### 2. install script
 ```bash 
 wget https://github.com/parsa-ghasemi/CDN-DNS-ip-changer/archive/refs/tags/v1.4.tar.gz
@@ -15,6 +19,10 @@ rm -r v1.4.tar.gz
 cd CDN-DNS-ip-changer-1.4
 
 ```
+
+
+
+
 
 ### 3. set tokens
 ```bash script
@@ -49,6 +57,17 @@ iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
 nano ips.env
 ```
 enter $NEW_IP, $CURRENT_IP1 with your IPs and, save & exit file with `control + y` & `control + x`.
+
+
+
+
+
+
+### 5. set location
+```bash script
+nano start.sh
+```
+set the files locations in `$location`
 
 
 

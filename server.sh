@@ -31,7 +31,7 @@
 
       ping5=`echo $request2 | jq -r .'"data" | ."avg"' | cut -b 3 `
 
-      if [ -r $ping5 ]
+      if [ -n $ping5 ]
       then
         echo '1'
       else
@@ -55,16 +55,21 @@
     ping4=`echo $request | jq -r .'"ir6.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping5=$( echo `ping -w5 $1 | grep -c 'ms'`)
 
-    if [ $ping1 = "OK" -a $ping2 = "OK" -a $ping3 = "OK" -a $ping4 = "OK" ]
+    if [ -n $ping1 -a -n $ping2 ]
     then
-      echo '1'
-    else
-      if [ $ping5 -ge "5" ]
+      if [ $ping1 = "OK" -a $ping2 = "OK" -a $ping3 = "OK" -a $ping4 = "OK" ]
       then
         echo '1'
       else
-        echo '0'
+        if [ $ping5 -ge "5" ]
+        then
+          echo '1'
+        else
+          echo '0'
+        fi
       fi
+    else
+      echo '0'
     fi
   }
 
@@ -233,7 +238,7 @@ END
 
 
 
-if [ ! $CURRENT_IP1 = null ]
+if [ -n $CURRENT_IP1 ]
 then
   ping_res=`get_ping $CURRENT_IP1 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'`
   if [ $ping_res = "1" ]
@@ -242,7 +247,7 @@ then
     if [ $ping_iran_res = "1" ]
     then
       message='your ip is available in iran.'
-      export STATUS="1"
+      echo "export STATUS='1'" > status.env
       echo $message | systemd-cat -t CDN-IP-changer -p info
     else
       ping_iran_res=`get_iran_ping $CURRENT_IP1`
@@ -251,41 +256,44 @@ then
         ping_iran_res=`get_iran_ping $CURRENT_IP1`
         if [ $ping_iran_res = "0" ]
         then
-          if [ `echo $STATUS` = "0" ]
+          if [ -n $STATUS ]
           then
+            if [ `echo $STATUS` = '0' ]
+            then
   #------------------------------------ set this values
            cf_records_update $NEW_IP 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
            ac_records_update $NEW_IP 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
            iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
   #----------------------------------------------------
-            message='your ip changed.' 
-            printf "\nexport CURRENT_IP1='`echo $NEW_IP`' \n# `date -R`" >> ips.env
-            export STATUS="0"
-            echo $message | systemd-cat -t CDN-IP-changer -p info
-          elif [ `echo $STATUS` = "1" ]
-          then
-            message='please check ip maybe is unavailable.'
-            export STATUS="0"
-            echo $message | systemd-cat -t CDN-IP-changer -p warning
+              message='your ip changed.' 
+              printf "\nexport CURRENT_IP1='`echo $NEW_IP`' \n# `date -R`" >> ips.env
+              echo "export STATUS='1'" > status.env
+              echo $message | systemd-cat -t CDN-IP-changer -p info
+            elif [ `echo $STATUS` = '1' ]
+            then
+              message='please check ip maybe is unavailable.'
+              echo "export STATUS='0'" > status.env
+              echo $message | systemd-cat -t CDN-IP-changer -p warning
+            fi
           else
             message='STATUS variable is not correct or is not set.'
-            export STATUS="1"
+            echo "export STATUS='1'" > status.env
             echo $message | systemd-cat -t CDN-IP-changer -p warning
           fi
         else
         message='your ip is available in iran.'
-        export STATUS="1"
+        echo "export STATUS='1'" > status.env
         echo $message | systemd-cat -t CDN-IP-changer -p info
         fi
       else
         message='your ip is available in iran.'
-        export STATUS="1"
+        echo "export 'STATUS='1'" > status.env
         echo $message | systemd-cat -t CDN-IP-changer -p info
       fi
     fi
   else
     message='your ip is not available at all.'
-    export STATUS="0"
+    echo "export STATUS='1'" > status.env
     echo $message | systemd-cat -t CDN-IP-changer -p error
   fi
 else

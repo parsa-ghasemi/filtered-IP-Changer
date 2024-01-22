@@ -87,8 +87,8 @@
     local i=0
     while [ $i -le $(( $cf_domains_count - 1 )) ]
       do
-        cf_dns_ids+=($( echo $request | jq -r '.result | .['$i'] | .id' ))
-        cf_dns_domains+=($( echo $request | jq -r '.result | .['$i'] | .name' ))         
+        cf_dns_ids[$i]=$( echo $request | jq -r '.result | .['$i'] | .id' )
+        cf_dns_domains[$i]=$( echo $request | jq -r '.result | .['$i'] | .name' )         
         i=$(( $i + 1 ))
       done
   }

@@ -14,9 +14,9 @@ sudo apt install jq -y
 ### 2. install script
 ```bash 
 wget https://github.com/parsa-ghasemi/CDN-DNS-ip-changer/archive/refs/tags/v1.4.1.tar.gz
-tar xvzf v1.4.tar.gz
-rm -r v1.4.tar.gz
-cd CDN-DNS-ip-changer-1.4
+tar xvzf v1.4.1.tar.gz
+rm -r v1.4.1.tar.gz
+cd CDN-DNS-ip-changer-1.4.1
 
 ```
 

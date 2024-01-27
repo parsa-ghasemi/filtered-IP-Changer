@@ -287,7 +287,7 @@ then
         fi
       else
         message='your ip is available in iran.'
-        echo "export 'STATUS='1'" > status.env
+        echo "export STATUS='1'" > status.env
         echo $message | systemd-cat -t CDN-IP-changer -p info
       fi
     fi

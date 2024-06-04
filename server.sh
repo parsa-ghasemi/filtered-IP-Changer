@@ -18,9 +18,8 @@
     ping1=`echo $request | jq -r .'"pl1.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping2=`echo $request | jq -r .'"us3.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping3=`echo $request | jq -r .'"fr2.node.check-host.net" | .[0] | .[0] | .[0]'`
-    ping4=$( echo `ping -w5 $1 | grep -c 'ms'`)
 
-    if [ $ping1 = "OK" -o $ping2 = "OK" -o $ping3 = "OK" -o $ping4 -ge "5" ]
+    if [ $ping1 = "OK" -o $ping2 = "OK" -o $ping3 = "OK" ]
     then
       echo '1'
     else
@@ -53,7 +52,6 @@
     ping2=`echo $request | jq -r .'"ir3.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping3=`echo $request | jq -r .'"ir5.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping4=`echo $request | jq -r .'"ir6.node.check-host.net" | .[0] | .[0] | .[0]'`
-    ping5=$( echo `ping -w5 $1 | grep -c 'ms'`)
 
     if [ -n $ping1 -a -n $ping2 ]
     then
@@ -61,12 +59,7 @@
       then
         echo '1'
       else
-        if [ $ping5 -ge "5" ]
-        then
-          echo '1'
-        else
-          echo '0'
-        fi
+        echo '0'
       fi
     else
       echo '0'
@@ -118,7 +111,7 @@
     then
       message='cloudflare changed ip.'
     else
-      message='cloudflare could not change ip.'
+      message="cloudflare could not change ip. ($2)"
     fi
     cat << END
 -------------------------------------------------------------------------------------
@@ -191,7 +184,7 @@ END
     then
       message='arvancloud changed ip.'
     else
-      message='arvancloud could not change ip.'
+      message="arvancloud could not change ip. ($2)"
     fi
     cat << END
 -------------------------------------------------------------------------------------
@@ -263,7 +256,7 @@ then
   #------------------------------------ set this values
            cf_records_update $NEW_IP 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
            ac_records_update $NEW_IP 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
-           iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
+         #  iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
   #----------------------------------------------------
               message='your ip changed.' 
               printf "\nexport CURRENT_IP1='`echo $NEW_IP`' \n# `date -R`" >> ips.env

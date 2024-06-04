@@ -29,8 +29,9 @@ telegram_chat_id=xxxxxxxx
     ping1=`echo $request | jq -r .'"pl1.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping2=`echo $request | jq -r .'"us3.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping3=`echo $request | jq -r .'"fr2.node.check-host.net" | .[0] | .[0] | .[0]'`
+    ping4=$( echo `ping -w5 $1 | grep -c 'ms'`)
 
-    if [ $ping1 = "OK" -o $ping2 = "OK" -o $ping3 = "OK" ]
+    if [ $ping1 = "OK" -o $ping2 = "OK" -o $ping3 = "OK" -o $ping4 -ge "5" ]
     then
       echo '1'
     else
@@ -62,6 +63,7 @@ telegram_chat_id=xxxxxxxx
     ping1=`echo $request | jq -r .'"ir1.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping2=`echo $request | jq -r .'"ir5.node.check-host.net" | .[0] | .[0] | .[0]'`
     ping3=`echo $request | jq -r .'"ir6.node.check-host.net" | .[0] | .[0] | .[0]'`
+    ping4=$( echo `ping -w5 $1 | grep -c 'ms'`)
 
     if [ -n $ping1 -a -n $ping2 ]
     then
@@ -69,7 +71,12 @@ telegram_chat_id=xxxxxxxx
       then
         echo '1'
       else
+        if [ $ping4 -ge "5" ]
+      then
+        echo '1'
+      else
         echo '0'
+      fi
       fi
     else
       echo '0'

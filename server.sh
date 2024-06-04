@@ -54,19 +54,18 @@ telegram_chat_id=xxxxxxxx
 # iran ping ($1=ip)
   function get_iran_ping(){
     request=$(curl -v --header "Accept: application/json" \
-    'https://check-host.net/check-ping?host='$1'&node=ir1.node.check-host.net&node=ir3.node.check-host.net&node=ir5.node.check-host.net&node=ir6.node.check-host.net' | jq -r '.request_id')
+    'https://check-host.net/check-ping?host='$1'&node=ir1.node.check-host.net&node=ir5.node.check-host.net&node=ir6.node.check-host.net' | jq -r '.request_id')
 
     request=$(curl -v --header "Accept: application/json" \
     https://check-host.net/check-result/$request)
 
     ping1=`echo $request | jq -r .'"ir1.node.check-host.net" | .[0] | .[0] | .[0]'`
-    ping2=`echo $request | jq -r .'"ir3.node.check-host.net" | .[0] | .[0] | .[0]'`
-    ping3=`echo $request | jq -r .'"ir5.node.check-host.net" | .[0] | .[0] | .[0]'`
-    ping4=`echo $request | jq -r .'"ir6.node.check-host.net" | .[0] | .[0] | .[0]'`
+    ping2=`echo $request | jq -r .'"ir5.node.check-host.net" | .[0] | .[0] | .[0]'`
+    ping3=`echo $request | jq -r .'"ir6.node.check-host.net" | .[0] | .[0] | .[0]'`
 
     if [ -n $ping1 -a -n $ping2 ]
     then
-      if [ $ping1 = "OK" -a $ping2 = "OK" -a $ping3 = "OK" -a $ping4 = "OK" ]
+      if [ $ping1 = "OK" -a $ping2 = "OK" -a $ping3 = "OK" ]
       then
         echo '1'
       else

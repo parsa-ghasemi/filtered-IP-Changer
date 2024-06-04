@@ -5,7 +5,7 @@ telegram_chat_id=xxxxxxxx
 
 #-------------------------start functions
 
-# global ping ($1=token, $2=chat_id, $3=message)
+# telegram bot ($1=token, $2=chat_id, $3=message)
   function telegram_message(){
     curl -s -X POST https://public-telegram-bypass.solyfarzane9040.workers.dev/bot$1/sendMessage -d chat_id=$2 -d text="$3" > /dev/null
   }

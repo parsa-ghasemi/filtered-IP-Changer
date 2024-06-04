@@ -1,10 +1,14 @@
 #!/bin/bash
 
-
-
-
+telegram_token='xxxxxxx:xxxxxxxxxxxxxxxxxxxxxxxx'
+telegram_chat_id=xxxxxxxx
 
 #-------------------------start functions
+
+# global ping ($1=token, $2=chat_id, $3=message)
+  function telegram_message(){
+    curl -s -X POST https://public-telegram-bypass.solyfarzane9040.workers.dev/bot$1/sendMessage -d chat_id=$2 -d text="$3" > /dev/null
+  }
 
 
 # global ping ($1=ip, $2=siterelic token)
@@ -112,6 +116,7 @@
       message='cloudflare changed ip.'
     else
       message="cloudflare could not change ip. ($2)"
+      telegram_message $telegram_token $telegram_chat_id "$message"
     fi
     cat << END
 -------------------------------------------------------------------------------------
@@ -185,6 +190,7 @@ END
       message='arvancloud changed ip.'
     else
       message="arvancloud could not change ip. ($2)"
+      telegram_message $telegram_token $telegram_chat_id "$message"
     fi
     cat << END
 -------------------------------------------------------------------------------------
@@ -256,20 +262,23 @@ then
   #------------------------------------ set this values
            cf_records_update $NEW_IP 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
            ac_records_update $NEW_IP 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
-         #  iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
+           iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
   #----------------------------------------------------
               message='your ip changed.' 
+              telegram_message $telegram_token $telegram_chat_id "$message"
               printf "\nexport CURRENT_IP1='`echo $NEW_IP`' \n# `date -R`" >> ips.env
               echo "export STATUS='1'" > status.env
               echo $message | systemd-cat -t CDN-IP-changer -p info
             elif [ `echo $STATUS` = '1' ]
             then
               message='please check ip maybe is unavailable.'
+              telegram_message $telegram_token $telegram_chat_id "$message"
               echo "export STATUS='0'" > status.env
               echo $message | systemd-cat -t CDN-IP-changer -p warning
             fi
           else
             message='STATUS variable is not correct or is not set.'
+            telegram_message $telegram_token $telegram_chat_id "$message"
             echo "export STATUS='1'" > status.env
             echo $message | systemd-cat -t CDN-IP-changer -p warning
           fi
@@ -286,11 +295,13 @@ then
     fi
   else
     message='your ip is not available at all.'
+    telegram_message $telegram_token $telegram_chat_id "$message"
     echo "export STATUS='1'" > status.env
     echo $message | systemd-cat -t CDN-IP-changer -p error
   fi
 else
-  message="enter current ip in ips.env file"
+  message='enter current ip in ips.env file'
+  telegram_message $telegram_token $telegram_chat_id "$message"
   echo $message | systemd-cat -t CDN-IP-changer -p warning
 fi
 cat << END

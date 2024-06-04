@@ -11,6 +11,13 @@ telegram_chat_id=xxxxxxxx
   }
 
 
+# update ips
+  function update_ips(){
+    cf_records_update $NEW_IP 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x' 'true'
+    ac_records_update $NEW_IP 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x' 'true'
+  }
+
+
 # global ping ($1=ip, $2=siterelic token)
   function get_ping(){
     request=$(curl -v --header "Accept: application/json" \
@@ -91,7 +98,7 @@ telegram_chat_id=xxxxxxxx
   }
 
 
-# update cloudflare domains ip ($1=ip, $2=zone-id, $3=email, $4=key, $5=andis)
+# update cloudflare domains ip ($1=ip, $2=zone-id, $3=email, $4=key, $5=andis, $6=proxied)
   function cf_records_update(){
     cf_records_info $2 $3 $4
     for i in $5
@@ -103,7 +110,7 @@ telegram_chat_id=xxxxxxxx
             --data '{
             "content": "'$1'",
             "name": "'${cf_dns_domains[$i]}'",
-            "proxied": true,
+            "proxied": '$6',
             "type": "A"
           }' 'https://api.cloudflare.com/client/v4/zones/'$2'/dns_records/'${cf_dns_ids[$i]}
         i=$(( $i + 1 ))
@@ -150,7 +157,7 @@ END
   }
 
 
-# update arvancloud domains ip ($1=ip, $2=domain, $3=key, $4=andis)
+# update arvancloud domains ip ($1=ip, $2=domain, $3=key, $4=andis, $5=cloud)
   function ac_records_update(){
     ac_records_info $2 $3
     for i in $4
@@ -170,7 +177,7 @@ END
           ],
           "type": "a",
           "name": "'${ac_dns_domains[$i]}'",
-          "cloud": true,
+          "cloud": '$5',
           "upstream_https": "default",
           "ip_filter_mode": {
             "count": "single",  
@@ -260,8 +267,7 @@ then
             if [ `echo $STATUS` = '0' ]
             then
   #------------------------------------ set this values
-           cf_records_update $NEW_IP 'xxxxxxxxxxxxxxxxxxxxxxxxxx' 'xxxxxxx@xxxxx.xxx' 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' 'x x'
-           ac_records_update $NEW_IP 'xxxxxxxx.xxx' 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx' 'x x x'
+           update_ips
            iran_tunnel $NEW_IP '/address/of/your/tunnel/service/config.txt'
   #----------------------------------------------------
               message='your ip changed.' 

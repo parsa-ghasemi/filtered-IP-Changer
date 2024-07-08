@@ -1,0 +1,178 @@
+{
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 62789,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      },
+      "tag": "api"
+    },
+    {
+      "listen": null,
+      "port": 8081,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 8081
+      },
+      "tag": "inbound-8081"
+    },
+	{
+      "listen": null,
+      "port": 443,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 443
+      },
+      "tag": "inbound-443"
+    },
+	{
+      "listen": null,
+      "port": 80,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 80
+      },
+      "tag": "inbound-80"
+    },
+	{
+      "listen": null,
+      "port": 8443,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 8443
+      },
+      "tag": "inbound-8443"
+    },
+	{
+      "listen": null,
+      "port": 2052,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 2052
+      },
+      "tag": "inbound-2052"
+    },
+    {
+      "listen": null,
+      "port": 2082,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 2082
+      },
+      "tag": "inbound-2082"
+    },
+	{
+      "listen": null,
+      "port": 2053,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 2053
+      },
+      "tag": "inbound-2053"
+    },
+	{
+      "listen": null,
+      "port": 597,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 597
+      },
+      "tag": "inbound-597"
+    },
+	{
+      "listen": null,
+      "port": 2096,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 2096
+      },
+      "tag": "inbound-2096"
+    },
+	{
+      "listen": null,
+      "port": 2086,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 2086
+      },
+      "tag": "inbound-2086"
+    },
+	{
+      "listen": null,
+      "port": 8080,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 8080
+      },
+      "tag": "inbound-8080"
+    },
+	{
+      "listen": null,
+      "port": 80,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 80
+      },
+      "tag": "inbound-80"
+    },
+	{
+      "listen": null,
+      "port": 2095,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "IP00",
+        "followRedirect": false,
+        "network": "tcp,udp",
+        "port": 2095
+      },
+      "tag": "inbound-2095"
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "blocked"
+    }
+  ]
+}

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-cd `echo $(pwd)`
-
 source status.env
+source tel.env
 source ips.env
-bash server.sh
+bash core.sh

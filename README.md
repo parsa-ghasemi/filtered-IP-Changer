@@ -21,10 +21,10 @@ sudo systemctl start xray
 
 ### 2. install script
 ```bash 
-wget https://github.com/parsa-ghasemi/CDN-DNS-ip-changer/archive/refs/tags/v2.0.0.tar.gz
+wget https://github.com/parsa-ghasemi/filtered-IP-Changer/archive/refs/tags/v2.0.0.tar.gz
 tar xvzf v2.0.0.tar.gz
 rm -r v2.0.0.tar.gz
-cd CDN-DNS-ip-changer-2.0.0
+cd filtered-IP-Changer-2.0.0
 
 ```
 

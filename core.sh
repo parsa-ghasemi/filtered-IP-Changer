@@ -22,7 +22,7 @@
     ping=$( echo `ping -w5 $1 | grep -c 'ms'`)
 
    
-    if [ $ping4 -ge "5" ]
+    if [ $ping -ge "5" ]
       then
         echo '1'
       else
@@ -82,7 +82,7 @@
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
----------------------------- $message ---------------------------
+---------- $message -----------
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ END
   }
 
 
-# update arvancloud domains ip ($1=ip, $2=domain, $3=key, $4=andis, $5=cloud)
+# update arvancloud domains ip ($1=ip, $2=domain, $3=key, $4=andis, $5=proxied)
   function ac_records_update(){
     ac_records_info $2 $3
       curl -v -XPUT \
@@ -152,7 +152,7 @@ END
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
----------------------------- $message ---------------------------
+---------- $message -----------
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ if [ $ping_res = "1" ]
 then
   message='your ip is available in iran.'
   echo "export STATUS='1'" > status.env
-  echo $message | systemd-cat -t CDN-IP-changer -p info
+  echo $message | systemd-cat -t filtered-IP-Changer -p info
 else
   ping_res=`get_ping $CURRENT_IP1`
   if [ $ping_res = "0" ]
@@ -204,35 +204,35 @@ else
       then
         if [ `echo $STATUS` = '0' ]
         then
-        update_ips
-        iran_tunnel $NEW_IP
+          update_ips
+          iran_tunnel $NEW_IP
           message='your ip changed.' 
           telegram_message $telegram_token $telegram_chat_id "$message" '1'
           printf "\nexport CURRENT_IP1='`echo $NEW_IP`' \n# `date -R`" >> ips.env
           echo "export STATUS='1'" > status.env
-          echo $message | systemd-cat -t CDN-IP-changer -p info
+          echo $message | systemd-cat -t filtered-IP-Changer -p info
         elif [ `echo $STATUS` = '1' ]
         then
           message='please check ip maybe is unavailable.'
           telegram_message $telegram_token $telegram_chat_id "$message" '0'
           echo "export STATUS='0'" > status.env
-          echo $message | systemd-cat -t CDN-IP-changer -p warning
+          echo $message | systemd-cat -t filtered-IP-Changer -p warning
         fi
       else
         message='STATUS variable is not correct or is not set.'
         telegram_message $telegram_token $telegram_chat_id "$message" '0'
         echo "export STATUS='1'" > status.env
-        echo $message | systemd-cat -t CDN-IP-changer -p warning
+        echo $message | systemd-cat -t filtered-IP-Changer -p warning
       fi
     else
     message='your ip is available in iran.'
     echo "export STATUS='1'" > status.env
-    echo $message | systemd-cat -t CDN-IP-changer -p info
+    echo $message | systemd-cat -t filtered-IP-Changer -p info
     fi
   else
     message='your ip is available in iran.'
     echo "export STATUS='1'" > status.env
-    echo $message | systemd-cat -t CDN-IP-changer -p info
+    echo $message | systemd-cat -t filtered-IP-Changer -p info
   fi
 fi
 

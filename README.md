@@ -2,14 +2,14 @@
 
 
 ### 1. install requirements:
-#### 1. install jq
+#### 1. install jq.
 ```bash script
 sudo apt install jq -y
 ```
 
 
 
-#### 2. install dokodemodoor tunnel
+#### 2. install dokodemodoor tunnel.
 ```bash script
 sudo bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install
 sudo systemctl start xray
@@ -70,7 +70,7 @@ bash start.sh
 
 
 ## cronjob
-you can set cronjob for auto update IP, if the IP doesn't ping then changed DNS IP in your all services
+you can set cronjob for auto update IP, if the IP doesn't ping then changed DNS IP in your all services.
 </br></br>
 ```
 */5 * * * * cd /the/file/location/filtered-IP-Changer/ && /bin/bash start.sh
@@ -79,7 +79,7 @@ you can set cronjob for auto update IP, if the IP doesn't ping then changed DNS 
 
 
 ## log
-you can check log with this
+you can check log with this.
 ```
 journalctl -ef -t filtered-IP-Changer
 ```

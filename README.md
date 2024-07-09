@@ -73,7 +73,7 @@ bash start.sh
 you can set cronjob for auto update IP, if the IP doesn't ping then changed DNS IP in your all services
 </br></br>
 ```
-*/5 * * * * cd /the/file/location/CDN-DNS-ip-changer/ && /bin/bash start.sh
+*/5 * * * * cd /the/file/location/filtered-IP-Changer/ && /bin/bash start.sh
 ```
 
 

@@ -166,6 +166,7 @@ END
   function iran_tunnel(){
     sed -i "s/IP00/$1/g" tunnel.json
     `cp -r tunnel.json /usr/local/etc/xray/config.json`
+    sed -i "s/$1/IP00/g" tunnel.json
     `sudo systemctl restart xray`
   
     cat << END

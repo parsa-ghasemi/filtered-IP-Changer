@@ -107,15 +107,15 @@
     },
 	{
       "listen": null,
-      "port": 2086,
+      "port": 108,
       "protocol": "dokodemo-door",
       "settings": {
         "address": "IP00",
         "followRedirect": false,
         "network": "tcp,udp",
-        "port": 2086
+        "port": 108
       },
-      "tag": "inbound-2086"
+      "tag": "inbound-108"
     },
 	{
       "listen": null,
